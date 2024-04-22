@@ -4,24 +4,40 @@ import (
 	"github.com/go-shafaq/defcase/internal"
 )
 
-var tagNode *internal.PkgNode = internal.NewPkgNode()
-
-func DefCase(tag, pkgPath string, c Case) {
-	tagNode.SetCase(tag, pkgPath, c)
+type DefCase interface {
+	SetCase(tag, pkgPath string, case_ Case)
+	GetCase(tag, pkgPath string) Case
+	Convert(tag, pkgPath, name string) string
+	Converter(tag, pkgPath string) func(name string) string
 }
 
-func ToDefCase(tag, pkgPath, name string) string {
-	c := tagNode.GetCase(tag, pkgPath)
+var public DefCase = New()
 
-	return Convert(name, c)
+func Get() DefCase {
+	return public
 }
 
-func DefCaseFn(tag string) func(pkgPath, name string) string {
-	pkgNode := tagNode.GetOrSetSubNode(tag)
+func New() DefCase {
+	return &defCase{tagNode: internal.NewPkgNode()}
+}
 
-	return func(pkgPath, name string) string {
-		c := pkgNode.GetCaseByPkg(pkgPath)
+type defCase struct {
+	tagNode *internal.PkgNode
+}
 
-		return Convert(name, c)
-	}
+func (d *defCase) SetCase(tag, pkgPath string, case_ Case) {
+	d.tagNode.SetCase(tag, pkgPath, case_)
+}
+
+func (d *defCase) GetCase(tag, pkgPath string) Case {
+	return d.tagNode.GetCase(tag, pkgPath)
+}
+
+func (d *defCase) Convert(tag, pkgPath, name string) string {
+	converter := d.Converter(tag, pkgPath)
+	return converter(name)
+}
+
+func (d *defCase) Converter(tag, pkgPath string) func(name string) string {
+	return d.tagNode.GetCase(tag, pkgPath).GetFunc()
 }
