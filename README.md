@@ -70,3 +70,18 @@ Pretty-print
 ```
 
 
+## Cases
+
+```json
+["ID", "Name", "UserId", "IHopeItWillBeHelpful"]
+```
+
+| Function               | Result                                      |
+|------------------------|---------------------------------------------|
+|                        | `ID Name UserId IHopeItWillBeHelpful`       |
+| `snak_case`            | `id name user_id i_hope_it_will_be_helpful` |
+| `camelCase`            | `id name userId iHopeItWillBeHelpful`       |
+| `kebab-case`           | `id name user-id i-hope-it-will-be-helpful` |
+| `PascalCase`           | `Id Name UserId IHopeItWillBeHelpful`       |
+| `SCREAMING_SNAKE_CASE` | `ID NAME USER_ID I_HOPE_IT_WILL_BE_HELPFUL` |
+ 
