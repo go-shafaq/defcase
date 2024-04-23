@@ -60,6 +60,7 @@ func main() {
 
 ### Result of <a href="http://localhost:8080/" target="_blank">localhost:8080</a> request
 Pretty-print
+
 ```json
 {
   "id": 1,
